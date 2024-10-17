@@ -1,0 +1,72 @@
+---
+import type { GetStaticPaths } from "astro";
+import { Image } from "astro:assets";
+import type { BlogResponse } from "../../interfaces/blog-response.interface";
+import Layout from "../../layouts/Layout.astro";
+export const getStaticPaths = (async () => {
+  const response = await fetch(import.meta.env.BLOG_BASE_URL + "/posts");
+  let data = (await response.json()) as BlogResponse;
+  return data.map((post) => ({
+    params: { slug: post.slug },
+    props: {
+      imgSrc: post.jetpack_featured_media_url,
+      title: post.title.rendered,
+      content: post.content.rendered,
+    },
+  }));
+}) satisfies GetStaticPaths;
+const { slug } = Astro.params;
+const { imgSrc, title, content } = Astro.props;
+---
+
+<Layout title={title}>
+  <div class="flex flex-col">
+    <div>
+      <a href="/">Regresar</a>
+    </div>
+    <article class:list={["flex flex-col   items-center rounded "]}>
+      <Image
+        width={400}
+        height={400}
+        transition:name={`${title}-image`}
+        class="w-96"
+        src={imgSrc}
+        alt={`blog ${title}`}
+      />
+      <h2 class="capitalize text-xl mt-2 font-medium">
+        {title}
+      </h2>
+      <!-- {JSON.stringify(content)} -->
+      <div class="mt-2">
+        <Fragment set:html={content} />
+        <!-- <p class="mt-2 text-left" set:html={content} /> -->
+      </div>
+    </article>
+  </div></Layout
+>
+
+<style>
+  a {
+    @apply hover:underline text-blue-500;
+  }
+  h5 {
+    font-family: "Josefin Sans";
+    color: #2f2f2e;
+    font-weight: 700;
+    letter-spacing: 0px;
+    font-size: 20px;
+    line-height: 1.45em;
+    margin-bottom: 20px !important;
+  }
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  .has-drop-cap:first-letter {
+    font-family: "Josefin Sans";
+    color: #2f2f2e;
+    font-weight: 700;
+    letter-spacing: 0px;
+  }
+</style>
