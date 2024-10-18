@@ -6,7 +6,7 @@ import { Image } from "astro:assets";
 import type { BlogResponse } from "../../interfaces/blog-response.interface";
 import Layout from "../../layouts/Layout.astro";
 export const getStaticPaths = (async () => {
-  const response = await fetch(import.meta.env.BLOG_BASE_URL + "/posts");
+  const response = await fetch(`${import.meta.env.BLOG_BASE_URL}/posts`);
   let data = (await response.json()) as BlogResponse;
   return data.map((post) => ({
     params: { slug: post.slug },
