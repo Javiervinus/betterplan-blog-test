@@ -28,8 +28,8 @@ export interface Post {
   "mostrar-en-portal": string;
   jetpack_featured_media_url: string;
   _links: Links;
+  _embedded: Embedded;
 }
-
 export interface Guid {
   rendered: string;
 }
@@ -120,6 +120,271 @@ export interface WpTerm {
 }
 
 export interface Cury {
+  name: string;
+  href: string;
+  templated: boolean;
+}
+
+export interface Embedded {
+  author: Author2[];
+  "wp:featuredmedia": Featuredmedum2[];
+  "wp:term": WpTerm2[][];
+}
+
+export interface Author2 {
+  id: number;
+  name: string;
+  url: string;
+  description: string;
+  link: string;
+  slug: string;
+  avatar_urls: AvatarUrls;
+  acf: any[];
+  _links: Links2;
+}
+
+export interface AvatarUrls {
+  "24": string;
+  "48": string;
+  "96": string;
+}
+
+export interface Links2 {
+  self: Self2[];
+  collection: Collection2[];
+}
+
+export interface Self2 {
+  href: string;
+}
+
+export interface Collection2 {
+  href: string;
+}
+
+export interface Featuredmedum2 {
+  id: number;
+  date: string;
+  slug: string;
+  type: string;
+  link: string;
+  title: Title2;
+  author: number;
+  acf: any[];
+  caption: Caption;
+  alt_text: string;
+  media_type: string;
+  mime_type: string;
+  media_details: MediaDetails;
+  source_url: string;
+  _links: Links3;
+}
+
+export interface Title2 {
+  rendered: string;
+}
+
+export interface Caption {
+  rendered: string;
+}
+
+export interface MediaDetails {
+  width: number;
+  height: number;
+  file: string;
+  filesize: number;
+  sizes: Sizes;
+  image_meta: ImageMeta;
+}
+
+export interface Sizes {
+  medium: Medium;
+  large: Large;
+  thumbnail: Thumbnail;
+  medium_large: MediumLarge;
+  "post-thumbnail": PostThumbnail;
+  "malina-masonry": MalinaMasonry;
+  "malina-extra-medium": MalinaExtraMedium;
+  "malina-slider": MalinaSlider;
+  "malina-fullwidth-slider": MalinaFullwidthSlider;
+  full: Full;
+}
+
+export interface Medium {
+  file: string;
+  width: number;
+  height: number;
+  filesize: number;
+  mime_type: string;
+  source_url: string;
+}
+
+export interface Large {
+  file: string;
+  width: number;
+  height: number;
+  filesize: number;
+  mime_type: string;
+  source_url: string;
+}
+
+export interface Thumbnail {
+  file: string;
+  width: number;
+  height: number;
+  filesize: number;
+  mime_type: string;
+  source_url: string;
+}
+
+export interface MediumLarge {
+  file: string;
+  width: number;
+  height: number;
+  filesize: number;
+  mime_type: string;
+  source_url: string;
+}
+
+export interface PostThumbnail {
+  file: string;
+  width: number;
+  height: number;
+  filesize: number;
+  mime_type: string;
+  source_url: string;
+}
+
+export interface MalinaMasonry {
+  file: string;
+  width: number;
+  height: number;
+  filesize: number;
+  mime_type: string;
+  source_url: string;
+}
+
+export interface MalinaExtraMedium {
+  file: string;
+  width: number;
+  height: number;
+  filesize: number;
+  mime_type: string;
+  source_url: string;
+}
+
+export interface MalinaSlider {
+  file: string;
+  width: number;
+  height: number;
+  filesize: number;
+  mime_type: string;
+  source_url: string;
+}
+
+export interface MalinaFullwidthSlider {
+  file: string;
+  width: number;
+  height: number;
+  filesize: number;
+  mime_type: string;
+  source_url: string;
+}
+
+export interface Full {
+  file: string;
+  width: number;
+  height: number;
+  mime_type: string;
+  source_url: string;
+}
+
+export interface ImageMeta {
+  aperture: string;
+  credit: string;
+  camera: string;
+  caption: string;
+  created_timestamp: string;
+  copyright: string;
+  focal_length: string;
+  iso: string;
+  shutter_speed: string;
+  title: string;
+  orientation: string;
+  keywords: any[];
+}
+
+export interface Links3 {
+  self: Self3[];
+  collection: Collection3[];
+  about: About2[];
+  author: Author3[];
+  replies: Reply2[];
+}
+
+export interface Self3 {
+  href: string;
+}
+
+export interface Collection3 {
+  href: string;
+}
+
+export interface About2 {
+  href: string;
+}
+
+export interface Author3 {
+  embeddable: boolean;
+  href: string;
+}
+
+export interface Reply2 {
+  embeddable: boolean;
+  href: string;
+}
+
+export interface WpTerm2 {
+  id: number;
+  link: string;
+  name: string;
+  slug: string;
+  taxonomy: string;
+  acf: any[];
+  _links: Links4;
+}
+
+export interface Links4 {
+  self: Self4[];
+  collection: Collection4[];
+  about: About3[];
+  up: Up[];
+  "wp:post_type": WpPostType[];
+  curies: Cury2[];
+}
+
+export interface Self4 {
+  href: string;
+}
+
+export interface Collection4 {
+  href: string;
+}
+
+export interface About3 {
+  href: string;
+}
+
+export interface Up {
+  embeddable: boolean;
+  href: string;
+}
+
+export interface WpPostType {
+  href: string;
+}
+
+export interface Cury2 {
   name: string;
   href: string;
   templated: boolean;

@@ -18,6 +18,11 @@ const { title } = Astro.props;
     <meta name="generator" content={Astro.generator} />
     <title>{title}</title>
     <ViewTransitions />
+    <style>
+      @view-transition {
+        navigation: auto;
+      }
+    </style>
   </head>
   <body class="">
     <div class="mt-10 max-w-3xl mx-auto px-4 pb-4">

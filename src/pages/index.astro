@@ -3,11 +3,11 @@ import Card from "../components/Card.astro";
 import type { BlogResponse } from "../interfaces/blog-response.interface";
 import Layout from "../layouts/Layout.astro";
 
-const response = await fetch(`${import.meta.env.BLOG_BASE_URL}/posts`);
+const response = await fetch(`${import.meta.env.BLOG_BASE_URL}/posts?_embed`);
 let data: BlogResponse | undefined = undefined;
 if (response.ok) {
   data = await response.json();
-  //   console.log(data);
+  console.log(data![0]);
 }
 ---
 
@@ -26,7 +26,10 @@ if (response.ok) {
           title={post.title.rendered}
           url={`/post/${post.slug}`}
           slug={post.slug}
-          imgSrc={post.jetpack_featured_media_url}
+          imgSrc={
+            post._embedded["wp:featuredmedia"][0].media_details.sizes.medium
+              .source_url
+          }
         />
       ))
     }

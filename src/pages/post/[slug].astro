@@ -1,6 +1,7 @@
 ---
 import type { GetStaticPaths } from "astro";
 import { Image } from "astro:assets";
+import { fade } from "astro:transitions";
 import type { BlogResponse } from "../../interfaces/blog-response.interface";
 import Layout from "../../layouts/Layout.astro";
 export const getStaticPaths = (async () => {
@@ -19,8 +20,15 @@ const { slug } = Astro.params;
 const { imgSrc, title, content } = Astro.props;
 ---
 
+<style>
+  div.content > h5.wp-block-heading {
+    margin-bottom: 120px !important;
+    background-color: black;
+  }
+</style>
+
 <Layout title={title}>
-  <div class="flex flex-col">
+  <div class="flex flex-col" transition:animate={fade({ duration: "200ms" })}>
     <div>
       <a href="/">Regresar</a>
     </div>
@@ -46,10 +54,13 @@ const { imgSrc, title, content } = Astro.props;
 >
 
 <style>
+  h5 {
+    margin-bottom: 120px !important;
+  }
   a {
     @apply hover:underline text-blue-500;
   }
-  h5 {
+  /* h5 {
     font-family: "Josefin Sans";
     color: #2f2f2e;
     font-weight: 700;
@@ -68,5 +79,5 @@ const { imgSrc, title, content } = Astro.props;
     color: #2f2f2e;
     font-weight: 700;
     letter-spacing: 0px;
-  }
+  } */
 </style>
