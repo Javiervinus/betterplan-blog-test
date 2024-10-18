@@ -1,16 +1,16 @@
 ---
 import type { GetStaticPaths } from "astro";
-import { Image } from "astro:assets";
-import { fade } from "astro:transitions";
 import type { BlogResponse } from "../../interfaces/blog-response.interface";
 import Layout from "../../layouts/Layout.astro";
 export const getStaticPaths = (async () => {
-  const response = await fetch(`${import.meta.env.BLOG_BASE_URL}/posts`);
+  const response = await fetch(`${import.meta.env.BLOG_BASE_URL}/posts?_embed`);
   let data = (await response.json()) as BlogResponse;
   return data.map((post) => ({
     params: { slug: post.slug },
     props: {
-      imgSrc: post.jetpack_featured_media_url,
+      imgSrc:
+        post._embedded["wp:featuredmedia"][0].media_details.sizes.medium
+          .source_url,
       title: post.title.rendered,
       content: post.content.rendered,
     },
@@ -20,64 +20,66 @@ const { slug } = Astro.params;
 const { imgSrc, title, content } = Astro.props;
 ---
 
-<style>
-  div.content > h5.wp-block-heading {
-    margin-bottom: 120px !important;
-    background-color: black;
+<style is:inline>
+  h1,
+  h2,
+  h3,
+  h4,
+  h5 {
+    font-weight: 700 !important;
+  }
+  ol,
+  ul {
+    box-sizing: border-box !important;
+  }
+
+  ul {
+    list-style: disc outside !important;
+    padding-left: 45px !important;
+  }
+  ol,
+  ul {
+    margin-left: 0px !important;
+  }
+
+  ul,
+  ol {
+    margin-bottom: 20px !important;
+  }
+  ul li {
+    color: #1c1d1f !important;
+  }
+  p {
+    margin-bottom: 26px !important;
   }
 </style>
 
 <Layout title={title}>
-  <div class="flex flex-col" transition:animate={fade({ duration: "200ms" })}>
+  <div class="flex flex-col w-full">
     <div>
-      <a href="/">Regresar</a>
+      <a href="../">Regresar</a>
     </div>
     <article class:list={["flex flex-col   items-center rounded "]}>
-      <Image
-        width={400}
-        height={400}
+      <img
         transition:name={`${title}-image`}
-        class="w-96"
+        class="w-96 h-auto"
         src={imgSrc}
         alt={`blog ${title}`}
       />
-      <h2 class="capitalize text-xl mt-2 font-medium">
+      <h2 class="capitalize text-xl my-5 font-medium">
         {title}
       </h2>
       <!-- {JSON.stringify(content)} -->
-      <div class="mt-2">
+      <div>
         <Fragment set:html={content} />
-        <!-- <p class="mt-2 text-left" set:html={content} /> -->
       </div>
+      <!-- <p class="mt-2 text-left" set:html={content} /> -->
     </article>
   </div></Layout
 >
 
 <style>
-  h5 {
-    margin-bottom: 120px !important;
-  }
   a {
     @apply hover:underline text-blue-500;
   }
-  /* h5 {
-    font-family: "Josefin Sans";
-    color: #2f2f2e;
-    font-weight: 700;
-    letter-spacing: 0px;
-    font-size: 20px;
-    line-height: 1.45em;
-    margin-bottom: 20px !important;
-  }
-  h1,
-  h2,
-  h3,
-  h4,
-  h5,
-  .has-drop-cap:first-letter {
-    font-family: "Josefin Sans";
-    color: #2f2f2e;
-    font-weight: 700;
-    letter-spacing: 0px;
-  } */
 </style>

@@ -1,6 +1,4 @@
 ---
-import { Image } from "astro:assets";
-
 interface Props {
   title: string;
   slug: string;
@@ -19,21 +17,18 @@ const { title, url, slug, imgSrc, isBig } = Astro.props;
   <article
     class:list={["flex flex-col justify-center items-center rounded  p-2"]}
   >
-    <Image
-      width={20}
-      height={20}
+    <img
       transition:name={`${title}-image`}
       class:list={[
         {
-          "w-full ": !isBig,
-          "w-30": isBig,
+          "w-72 h-40 object-cover": !isBig,
+          "w-30 h-auto": isBig,
         },
       ]}
       src={imgSrc!}
       alt={`blog ${title}`}
     />
     <h2
-      transition:name={`${title}-title`}
       class:list={[
         "capitalize font-medium mt-1 text-center w-full line-clamp-2",
         {
