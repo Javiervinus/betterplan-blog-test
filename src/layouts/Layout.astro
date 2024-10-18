@@ -1,31 +1,48 @@
 ---
 import { ViewTransitions } from "astro:transitions";
+import { SiteInfo } from "../constants/site-info";
 
 interface Props {
-  title: string;
+  title?: string;
+  image?: string;
+  description?: string;
 }
-
-const { title } = Astro.props;
+const {
+  title = SiteInfo.title,
+  description = SiteInfo.description,
+  image,
+} = Astro.props;
 ---
 
 <!doctype html>
 <html lang="en">
   <head>
-    <meta charset="UTF-8" />
-    <meta name="description" content="Astro description" />
-    <meta name="viewport" content="width=device-width" />
+    <meta charset="utf-8" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <meta name="viewport" content="width=device-width" />
     <meta name="generator" content={Astro.generator} />
+
+    <!-- SEO -->
+    <meta name="description" content={description} />
+    <meta name="author" content={SiteInfo.author} />
+
+    <!-- OG Metatags -->
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:image" content={image} />
+
+    <!-- Required -->
     <title>{title}</title>
+
     <ViewTransitions />
-    <style>
+    <!-- <style>
       @view-transition {
         navigation: auto;
       }
-    </style>
+    </style> -->
   </head>
   <body class="">
-    <div class="mt-10 max-w-4xl mx-auto px-4 pb-4">
+    <div class="mt-10 max-w-4xl mx-auto pb-4">
       <main class="md:p-10 p-5 shadow-none md:shadow-lg w-full">
         <slot />
       </main>

@@ -18,7 +18,7 @@ const { title, url, slug, imgSrc, isBig } = Astro.props;
     class:list={["flex flex-col justify-center items-center rounded  p-2"]}
   >
     <img
-      transition:name={`${title}-image`}
+      transition:name={`${slug}-image`}
       class:list={[
         {
           "w-72 h-40 object-cover": !isBig,

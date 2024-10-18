@@ -2,22 +2,98 @@
 import type { GetStaticPaths } from "astro";
 import type { BlogResponse } from "../../interfaces/blog-response.interface";
 import Layout from "../../layouts/Layout.astro";
+import OpenAI from "openai";
+import fs from "fs";
+import path from "path";
+
+import { generateText } from "ai";
+import { createOpenAI } from "@ai-sdk/openai";
+
 export const getStaticPaths = (async () => {
+  const openai = createOpenAI({
+    apiKey: import.meta.env.OPENAI_API_KEY,
+  });
   const response = await fetch(`${import.meta.env.BLOG_BASE_URL}/posts?_embed`);
   let data = (await response.json()) as BlogResponse;
-  return data.map((post) => ({
-    params: { slug: post.slug },
-    props: {
-      imgSrc:
-        post._embedded["wp:featuredmedia"][0].media_details.sizes.medium
-          .source_url,
-      title: post.title.rendered,
-      content: post.content.rendered,
-    },
-  }));
+
+  let dataFinal: any[] = [];
+
+  for (const post of data) {
+    // const { text } = await generateText({
+    //   model: openai("gpt-4o-mini"),
+    //   prompt: post.content.rendered,
+    //   system:
+    //     "remueve todas las etiquetas html y deja solo el texto sin ruido, no quites los puntos ni las comas",
+    //   maxTokens: 200,
+    // });
+    dataFinal.push({
+      params: { slug: post.slug },
+      props: {
+        imgSrc:
+          post._embedded["wp:featuredmedia"][0].media_details.sizes.medium
+            .source_url,
+        title: post.title.rendered,
+        content: post.content.rendered,
+        // contentClean: text,
+      },
+    });
+  }
+  //   data.map((post) => {
+
+  // return {
+  // params: { slug: post.slug },
+  // props: {
+  //   imgSrc:
+  //     post._embedded["wp:featuredmedia"][0].media_details.sizes.medium
+  //       .source_url,
+  //   title: post.title.rendered,
+  //   content: post.content.rendered,
+  // },
+  // }
+  // });
+  return dataFinal;
 }) satisfies GetStaticPaths;
 const { slug } = Astro.params;
 const { imgSrc, title, content } = Astro.props;
+const openai = createOpenAI({
+  apiKey: import.meta.env.OPENAI_API_KEY,
+});
+const text = "asad";
+const textResume =
+  "Un asesor financiero es un profesional o robo-advisor que ayuda a gestionar inversiones y orientar a los clientes en sus decisiones financieras. Un buen asesor tiene un profundo conocimiento de los mercados y puede personalizar un plan de inversión basado en el perfil de riesgo y";
+
+// const { text } = await generateText({
+//   model: openai("gpt-4o-mini"),
+//   prompt: content,
+//   system:
+//     "remueve todas las etiquetas html y deja solo el texto sin ruido, no quites los puntos ni las comas",
+//   maxTokens: 50,
+// });
+// const { text: textResume } = await generateText({
+//   model: openai("gpt-4o-mini"),
+//   prompt: content,
+//   system:
+//     "Genera un resumen del texto, intenta ser breve, entrega solo texto sin ruido",
+//   maxTokens: 50,
+// });
+
+// // console.log(text);
+// const client = new OpenAI({
+//   apiKey: import.meta.env.OPENAI_API_KEY,
+// });
+// const speechFile = path.resolve(`./public/audios/${slug}.mp3`);
+
+// const mp3 = await client.audio.speech.create({
+//   model: "tts-1",
+//   input: text,
+//   voice: "nova",
+// });
+// const buffer = Buffer.from(await mp3.arrayBuffer());
+// await fs.promises.writeFile(speechFile, buffer);
+// get link to audio file
+const audioLink = `/audios/${slug}.mp3`;
+
+console.log(text);
 ---
 
 <style is:inline>
@@ -54,25 +130,38 @@ const { imgSrc, title, content } = Astro.props;
   }
 </style>
 
-<Layout title={title}>
+<Layout title={title} class:list={["relative"]}>
   <div class="flex flex-col w-full">
     <div>
-      <a href="../">Regresar</a>
+      <button onclick="history.back()" class="text-blue-500">Regresar</button>
     </div>
     <article class:list={["flex flex-col   items-center rounded "]}>
+      <h2 class="capitalize text-xl my-5 font-medium">
+        {title}
+      </h2>
       <img
-        transition:name={`${title}-image`}
+        transition:name={`${slug}-image`}
         class="w-96 h-auto"
         src={imgSrc}
         alt={`blog ${title}`}
       />
-      <h2 class="capitalize text-xl my-5 font-medium">
-        {title}
-      </h2>
+      <audio
+        class="my-5 sticky top-2"
+        controls
+        controlslist="nodownload noplaybackrate novolume"
+      >
+        <source src={audioLink} type="audio/mp3" />
+        Your browser does not support the audio element.
+      </audio>
+
       <!-- {JSON.stringify(content)} -->
       <div>
         <Fragment set:html={content} />
       </div>
+      <div class="mt-10">
+        {textResume}
+      </div>
+
       <!-- <p class="mt-2 text-left" set:html={content} /> -->
     </article>
   </div></Layout
